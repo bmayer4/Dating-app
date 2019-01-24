@@ -6,3 +6,39 @@
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 
+
+  .tab-panel {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.member-tabset > .tab-content {
+    border: 0;
+    border-top: 1px solid #eee;
+    padding: 15px 0;
+  }
+
+.member-tabset > .nav-tabs .nav-link {
+    background-color: #fff;
+    color: #325D88;
+    border: none;
+}
+
+.member-tabset > .nav-tabs > li:hover {
+    border-bottom: 4px solid rgba(41, 171, 224, .4);
+  }
+
+.member-tabset > .nav-tabs > li.active {
+    border-bottom: 4px solid #29ABE0; 
+    position: relative;
+}
+
+/* heading titles */
+.member-tabset > .nav-tabs > li.active > a {  
+    color: #29ABE0;
+  }
+  
+
+
+

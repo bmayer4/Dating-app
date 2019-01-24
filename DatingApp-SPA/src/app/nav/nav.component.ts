@@ -19,6 +19,7 @@ export class NavComponent {
     // console.log(loginForm); dont check if form is valid before sending, then nothing would happen, better to get error back and handle it
       this.authService.login(this.model).subscribe(next => {
         this.as.success('Logged in successfully');
+        loginForm.control.reset();
       }, err => {
         this.as.error(err);
       }, () => {
