@@ -14,12 +14,15 @@ export class UserService {
 constructor(private http: HttpClient) { }
 
 getUsers(): Observable<User[]> {
-  console.log('from users service', localStorage.getItem('token'));
   return this.http.get<User[]>(this.baseUrl + 'users');
 }
 
 getUser(id: number): Observable<User> {
   return this.http.get<User>(this.baseUrl + 'users/' + id);
+}
+
+updateUser(id: number, user: User) {
+  return this.http.put(this.baseUrl + 'users/' + id, user);
 }
 
 }
