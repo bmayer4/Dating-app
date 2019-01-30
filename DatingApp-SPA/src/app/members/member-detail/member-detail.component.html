@@ -3,7 +3,7 @@
     <h1>{{user.username}}'s Profile</h1>
   </div>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-md-4">
       <div class="card">
         <img class="card-img-top img-thumbnail" src="{{user.photoUrl}}" alt="{{user.username}}">
         <div class="card-body">
@@ -25,15 +25,15 @@
           </div>
         </div>
         <div class="card-footer">
-          <div class="d-flex justify-content-center"> 
-            <button class="btn btn-primary w-50 mr-3">Like</button>
-            <button class="btn btn-info w-50">Message</button>
+          <div class=""> 
+            <button class="btn btn-sm btn-primary m-1">Like</button>
+            <button class="btn btn-sm btn-info m-1">Message</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-8">
+    <div class="col-md-8">
       <div class="tab-panel">
         <tabset class="member-tabset">
             <tab heading="About {{user.username}}">

@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/_models/user';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/_services/auth.service';
+import { Photo } from 'src/app/_models/photo';
 
 @Component({
   selector: 'app-member-edit',
@@ -14,6 +15,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 export class MemberEditComponent implements OnInit {
   @ViewChild('editForm') editForm: NgForm;  // allows us to access form, (could have passed it into method)
   user: User;
+  photoUrl: string;
 
   @HostListener('window:beforeunload', ['$event'])  // for closing browser during edit
   unloadNotification($event: any) {
@@ -31,6 +33,9 @@ export class MemberEditComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.user = data['user'];
     });
+    this.authService.currentPhotoUrl.subscribe(photoUrl => {
+      this.photoUrl = photoUrl;  // simply using main from from behavior subject and sub to it
+    });
   }
 
   updateUser() {
@@ -40,6 +45,11 @@ export class MemberEditComponent implements OnInit {
       this.editForm.reset(this.user);  // param sets the form (no param clears it out)
     },
     err => this.as.error(err));
+  }
+
+  updateMainPhoto(photoUrl: string) {
+    // this.user.photoUrl = photoUrl;   not doing this, keeping it for ref
+    // console.log('main photo is now: ', photoUrl);
   }
 
 }

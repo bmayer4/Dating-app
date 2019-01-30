@@ -1,8 +1,9 @@
 .img-thumbnail {
-    width: 85%;
-    height: 85%;
-    margin: 20px auto;
+    height: auto;
+    max-width: 340px;
+    margin: 20px auto;  
 }
+/* margin auto because of bootstrap card, we would normally text-align: center; the card and image would be centered */
 
 .card-body {
     padding: 0 25px;

@@ -1,0 +1,26 @@
+  img.img-fluid {
+    margin-bottom: 2px;
+} 
+
+/* @media (max-width: 575.98px) {
+    div.text-center {
+        text-align: left !important;
+    }   
+    img.img-fluid {
+        max-height: 100px !important;
+        max-width: 100px !important;
+    }
+} */
+
+.nv-file-over {
+    border: dotted 3px red;
+}
+
+/*hides text next to inputs*/
+input[type=file] {
+    color: transparent;
+}
+
+.main-button:hover:enabled, .trash-button:hover:enabled {
+    color: #007bff;
+}
