@@ -51,16 +51,20 @@ export class PhotoEditorComponent implements OnInit {
           url: res.url,
           dateAdded: res.dateAdded,
           description: res.description,
-          isMain: res.isMain
+          isMain: res.isMain  // api sets it to main if first photo
         };
         this.photos.push(photo);
+        if (photo.isMain) {   // important for first photo uploaded to show instantly througout app (lec 130)
+          this.authService.changeMemberPhoto(photo.url);
+          this.authService.currentUser.photoUrl = photo.url;
+          localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
+        }
       }
     };
   }
 
   setMainPhoto(photo: Photo) {
     this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
-      console.log('set to main');
       // find returns after it satisfies, better than filter which loops through everything
       // this works since arrays are passed by reference
       this.currentMain = this.photos.find(p => p.isMain === true);

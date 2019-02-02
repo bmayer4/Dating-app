@@ -16,7 +16,7 @@ export class AuthService {
   decodedToken: any;
   currentUser: User;
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
-  currentPhotoUrl = this.photoUrl.asObservable();  // components can subscribe to ths now
+  currentPhotoUrl = this.photoUrl.asObservable();  // components can subscribe to this now
 
 constructor(private http: HttpClient) { }
 
@@ -39,8 +39,8 @@ login(model: any) {  // angular uses application/json as default content type in
     }));
 }
 
-register(model: any) {
-  return this.http.post(this.baseUrl + 'register', model);
+register(user: User) {
+  return this.http.post(this.baseUrl + 'register', user);
 }
 
 loggedIn() {

@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
         this.authService.decodedToken = this.jwtHelper.decodeToken(token);
         this.authService.currentUser = user;
         this.authService.changeMemberPhoto(user.photoUrl);
+      } else {
+        this.authService.logout();
       }
   }
 
