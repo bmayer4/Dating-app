@@ -43,7 +43,7 @@ namespace DatingApp.API
             services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddTransient<Seed>();   //now creatable through DI
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));  //Look what this does! :)
-
+            services.AddScoped<LogUserActivity>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(opt => {
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

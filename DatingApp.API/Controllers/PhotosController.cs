@@ -138,7 +138,7 @@ namespace DatingApp.API.Controllers
                 return BadRequest("This is already the main photo");
             }
 
-            var mainPhotoForUser = await _repo.GetMainUserForPhoto(userId);
+            var mainPhotoForUser = await _repo.GetMainPhotoForUser(userId);
 
             if (mainPhotoForUser == null) {
                 return BadRequest();
