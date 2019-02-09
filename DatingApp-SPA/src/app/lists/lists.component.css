@@ -1,0 +1,12 @@
+.filterLinks a:hover {
+    color:#29ABE0 !important;
+    cursor: pointer;
+}
+
+.filterLinks a {
+    font-size: 15px !important;
+}
+
+.active {
+    color:#29ABE0 !important;
+}

@@ -28,7 +28,7 @@ namespace DatingApp.API.Data
 
         public async Task<User> GetUser(int id)
         {
-            return await _context.Users.Include(u => u.Photos).FirstOrDefaultAsync(u => u.Id == id);
+           return await _context.Users.Include(u => u.Photos).FirstOrDefaultAsync(u => u.Id == id);
         }
 
          public async Task<PagedList<User>> GetUsers(UserParams userParams)
@@ -37,6 +37,19 @@ namespace DatingApp.API.Data
             var users = _context.Users.Include(u => u.Photos).OrderByDescending(u => u.LastActive).AsQueryable();  //AsQueryable lets you use where clause on it (woould have been IIncludableQuery)
             users = users.Where(u => u.Id != userParams.UserId);
             users = users.Where(u => u.Gender == userParams.Gender);
+
+            if (userParams.Likers)
+            {
+               var userLikers = await GetUserLikes(userParams.UserId, userParams.Likers);
+               users = users.Where(u => userLikers.Contains(u.Id));
+            }
+
+             if (userParams.Likees)
+            {
+               var userLikees = await GetUserLikes(userParams.UserId, userParams.Likers);
+               users = users.Where(u => userLikees.Contains(u.Id));
+            }
+
             if (userParams.MinAge != 18 || userParams.MaxAge != 99)
             {
                 var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1); //since a person is the same age for 364 days, we  use -1
@@ -70,22 +83,21 @@ namespace DatingApp.API.Data
             return await _context.Photos.FirstOrDefaultAsync(p => p.UserId == userId && p.Id == id);
         }
 
-        // public async void SetMainPhoto(int userId, int id)  //my way
-        // {
-        //     var mainPhoto = await _context.Photos.Where(p => p.UserId == userId && p.IsMain == true).FirstOrDefaultAsync();
-        //     if (mainPhoto  != null) {
-        //         mainPhoto.IsMain = false;
-        //     }
-
-        //     var photoToSet = await _context.Photos.Where(p => p.UserId == userId && p.Id == id).FirstOrDefaultAsync();
-        //     if (photoToSet != null) {
-        //         photoToSet.IsMain = true;
-        //     }
-        // }
-
         public async Task<Photo> GetMainPhotoForUser(int userId)
         {
             return await _context.Photos.Where(p => p.UserId == userId && p.IsMain == true).FirstOrDefaultAsync();
+        }
+
+        public async Task<Like> GetLike(int userId, int recipientId)  //query same as above using Where
+        {   //user would only being liking another person, so userid would always be likerid
+            return await _context.Likes.FirstOrDefaultAsync(l => l.LikerId == userId && l.LikeeId == recipientId);
+        }
+
+        private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers)
+        {
+            var user = await _context.Users.Include(u => u.Likers).Include(u => u.Likees).FirstOrDefaultAsync(u => u.Id == id);
+
+            return likers ? user.Likers.Select(i => i.LikerId) : user.Likees.Select(i => i.LikeeId);
         }
 
         public async Task<bool> SaveAll()
