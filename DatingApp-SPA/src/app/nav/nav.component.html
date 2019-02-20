@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
   <div class="container">
       <div class="navbar-header">
           <button type="button" class="navbar-toggle navbar-toggler collapsed d-block d-sm-none" (click)="isCollapsed = !isCollapsed">
@@ -6,11 +6,11 @@
           </button>
           <a class="navbar-brand d-none d-sm-inline" [routerLink]="['/home']">Dating App</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse"
-        (collapsed)="collapsed($event)"
-        (expanded)="expanded($event)"
-        [collapse]="isCollapsed">
+    <div id="navbar" class="navbar-collapse" [collapse]="isCollapsed">
     <ul *ngIf="loggedIn()" class="nav navbar-nav mr-auto">
+      <li>
+      <a class="navbar-brand d-block d-sm-none" [routerLink]="['/home']">Dating App</a>
+    </li>
       <li class="nav-item" routerLinkActive="active" >
         <a class="nav-link" [routerLink]="['/members']">Matches</a>
       </li>
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <form *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline my-2 my-lg-0" (ngSubmit)="login(loginForm)">
+    <form *ngIf="!loggedIn()" #loginForm="ngForm" class="ml-auto form-inline loginForm" (ngSubmit)="login(loginForm)">
       <input class="form-control mr-sm-2" type="text" name="username" #username="ngModel" placeholder="Username" required [(ngModel)]="model.username">
       <input class="form-control mr-sm-2" type="password" name="password" #password="ngModel" placeholder="Password" required [(ngModel)]="model.password">
       <button [disabled]="!loginForm.valid" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>

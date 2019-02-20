@@ -45,8 +45,4 @@ export class NavComponent implements OnInit {
     return this.authService.loggedIn();
   }
 
-  collapsed(event: any): void {}
-
-  expanded(event: any): void {}
-
 }

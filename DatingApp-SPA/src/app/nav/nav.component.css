@@ -8,3 +8,19 @@ img {
     border: 1px solid #fff;
     border-radius: 3px;
 }
+
+
+@media (max-width: 575.98px) { 
+    .navbar-brand {
+        margin-top: 10px;
+    }
+
+    .loginForm {
+        margin-top: 10px;
+        padding: 0 10px;
+    }
+
+    .loginForm input {
+        margin: 7px 0;
+    }
+ }
