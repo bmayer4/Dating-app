@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from '../_models/user';
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
+import { Message } from '../_models/message';
 
 
 @Injectable({
@@ -24,7 +25,7 @@ getUsers(page?, itemsPerPage?, userParams?, likesParams?): Observable<PaginatedR
     params = params.append('pageSize', itemsPerPage);
   }
 
-  if (userParams != null) {
+   if (userParams != null) {  // we set it to null in resolver, object exists (not null even if empty) in MemberListComponent ngOnInit
     params = params.append('minAge', userParams.minAge);
     params = params.append('maxAge', userParams.maxAge);
     params = params.append('gender', userParams.gender);
@@ -40,7 +41,7 @@ getUsers(page?, itemsPerPage?, userParams?, likesParams?): Observable<PaginatedR
   }
 
   // observe: 'response' gives us access to response headers
-  return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params}).pipe(
+  return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params: params }).pipe(
     map(response => {
       paginatedResult.result = response.body;
       if (response.headers.get('Pagination') != null) {
@@ -71,4 +72,45 @@ sendLike(id: number, recipientId: number) {
   return this.http.post(this.baseUrl + 'users/' + id + '/like/' + recipientId, {});
 }
 
+// could have created another service for messaeges
+getMessages(id: number, page?, itemsPerPage?, messagecontainer?): Observable<PaginatedResult<Message[]>> {
+  const paginatedResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
+
+  let params = new HttpParams();
+
+  if (messagecontainer != null) {
+    params = params.append('messageContainer', messagecontainer);
+  }
+
+  if (page != null && itemsPerPage != null) {
+    params = params.append('pageNumber', page);
+    params = params.append('pageSize', itemsPerPage);
+  }
+
+  return this.http.get<Message[]>(this.baseUrl + 'users/' + id + '/messages', { observe: 'response', params }).pipe(
+      map(response => {
+        paginatedResult.result = response.body;
+        if (response.headers.get('Pagination') != null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+        return paginatedResult;
+      })
+    );
+  }
+
+  getMessageThread(id: number, recipientId: number) {
+    return this.http.get<Message[]>(this.baseUrl + 'users/' + id + '/messages/thread/' + recipientId);
+  }
+
+  sendMessage(id: number, message: Message) {  // doesn't match Message..
+    return this.http.post(this.baseUrl + 'users/' + id + '/messages', message);
+  }
+
+  deleteMessage(userId: number, id: number) {
+    return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id, {});
+  }
+
+  markAsRead(userId: number, id: number) {
+    this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id + '/read', {}).subscribe();
+  }
 }

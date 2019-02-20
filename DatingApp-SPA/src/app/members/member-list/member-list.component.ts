@@ -61,7 +61,7 @@ export class MemberListComponent implements OnInit {
         this.users = res.result;
         this.pagination = res.pagination;
       },
-      err => this.as.error(err));   // private as: AlertifyService was injected
+      err => this.as.error(err));
   }
 
 }

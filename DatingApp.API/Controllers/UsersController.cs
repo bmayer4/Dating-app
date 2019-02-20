@@ -32,9 +32,9 @@ namespace DatingApp.API.Controllers
         {
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            userParams.UserId = currentUserId;
+            var userFromRepo = await _repo.GetUser(currentUserId);  //  not necessary to null check since userId was found
 
-            var userFromRepo = await _repo.GetUser(currentUserId);
+            userParams.UserId = currentUserId;
 
             if (string.IsNullOrEmpty(userParams.Gender))
             {
@@ -74,11 +74,6 @@ namespace DatingApp.API.Controllers
 
             var userFromRepo = await _repo.GetUser(id);
 
-             if (userFromRepo == null)
-            {
-                return NotFound();
-            }
-
             _mapper.Map(userforUpdateDto, userFromRepo);
 
             if (!await _repo.SaveAll())
@@ -111,7 +106,7 @@ namespace DatingApp.API.Controllers
 
             var like = new Like()
             {
-                LikerId = id,
+                LikerId = id,   //LikerId is foreign key here, so would go under user.Likees
                 LikeeId = recipientId
             };
 

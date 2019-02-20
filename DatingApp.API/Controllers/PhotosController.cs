@@ -64,11 +64,6 @@ namespace DatingApp.API.Controllers
 
             var userFromRepo = await _repo.GetUser(userId);
 
-             if (userFromRepo == null)
-            {
-                return NotFound();
-            }
-
             var file = photoForCreationDto.File;
             var uploadResult = new ImageUploadResult();  //store result from cloudinary
 
@@ -121,13 +116,6 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
             }
 
-            var userFromRepo = await _repo.GetUser(userId);
-
-             if (userFromRepo == null)
-            {
-                return NotFound();
-            }
-
             var photoFromRepo = await _repo.GetPhoto(userId, id);
 
             if (photoFromRepo == null) {
@@ -162,13 +150,6 @@ namespace DatingApp.API.Controllers
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
             {
                 return Unauthorized();
-            }
-
-            var userFromRepo = await _repo.GetUser(userId);
-
-             if (userFromRepo == null)
-            {
-                return NotFound();
             }
 
             var photoFromRepo = await _repo.GetPhoto(userId, id);

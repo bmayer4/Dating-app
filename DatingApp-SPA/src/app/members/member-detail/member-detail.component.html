@@ -17,7 +17,7 @@
           </div>
           <div>
               <strong>Last Active:</strong>
-              <p>{{user.lastActive | timeAgo}}</p>
+              <p>{{user.lastActive | timeAgo}}</p> 
           </div>
           <div>
               <strong>Member Since:</strong>
@@ -27,7 +27,7 @@
         <div class="card-footer">
           <div class=""> 
             <button class="btn btn-sm btn-primary m-1">Like</button>
-            <button class="btn btn-sm btn-info m-1">Message</button>
+            <button class="btn btn-sm btn-info m-1" (click)="selectTab(3)">Message</button>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
 
     <div class="col-md-8">
       <div class="tab-panel">
-        <tabset class="member-tabset">
+        <tabset class="member-tabset" #memberTabs>
             <tab heading="About {{user.username}}">
               <h4>Description</h4>
               <p>{{user.introduction}}</p>
@@ -52,7 +52,7 @@
             </tab>
             <tab heading="Messages">
               <h4>Messages</h4>
-              <p>Messages will go here</p>
+              <app-member-messages [recipientId]="user.id"></app-member-messages>
             </tab>
         </tabset>
       </div>

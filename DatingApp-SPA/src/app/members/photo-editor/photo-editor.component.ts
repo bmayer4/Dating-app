@@ -85,7 +85,7 @@ export class PhotoEditorComponent implements OnInit {
     this.as.confirm('Are you sure you want to delete this photo?', () => {
       this.userService.deletePhoto(this.authService.decodedToken.nameid, id).subscribe(() => {
         const photoIndex = this.photos.findIndex(p => p.id === id);
-        this.photos.splice(photoIndex, 1);
+        this.photos.splice(photoIndex, 1);    // could use filter
         this.as.success('Photo deleted');
       }, err => this.as.error('Failed to delete the photo'));
     });
