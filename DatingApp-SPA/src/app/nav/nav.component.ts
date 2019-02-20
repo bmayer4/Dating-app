@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
   model: any = {};
   photoUrl: string;
+  isCollapsed = true;
 
   // public so we can use it in our template, might be a lint issue
   constructor(public authService: AuthService, private as: AlertifyService, private router: Router) { }
@@ -43,5 +44,9 @@ export class NavComponent implements OnInit {
   loggedIn() {
     return this.authService.loggedIn();
   }
+
+  collapsed(event: any): void {}
+
+  expanded(event: any): void {}
 
 }
