@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using DatingApp.API.Helpers;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DatingApp.API
 {
@@ -36,7 +37,9 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             var cs = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<DataContext>(o => o.UseSqlite(cs));
+            // services.AddDbContext<DataContext>(o => o.UseSqlite(cs));  //switched from sqlite to sqlserver
+             services.AddDbContext<DataContext>(o => o.UseSqlServer(cs)
+             .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
 
             //in the middle of singleton and transient
             services.AddScoped<IAuthRepository, AuthRepository>();
@@ -91,7 +94,14 @@ namespace DatingApp.API
             //app.UseHttpsRedirection();
             app.UseCors(opts => opts.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseDefaultFiles();  // will look for index.html (or other default file)
+            app.UseStaticFiles();  // will serve content from wwwroot folder
+            app.UseMvc(routes => {
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Fallback", action = "Index" }
+                );
+            });
         }
     }
 }

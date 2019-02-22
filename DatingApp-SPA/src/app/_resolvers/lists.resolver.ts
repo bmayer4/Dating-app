@@ -12,7 +12,7 @@ import { PaginatedResult } from '../_models/pagination';
 export class ListsResolver implements Resolve<PaginatedResult<User[]>> {
     pageNumber = 1;
     pageSize = 5;
-    likesParams = 'likers';
+    likesParams = 'likers';  // could change gender to all here..
 
     constructor(private userService: UserService, private router: Router, private as: AlertifyService) {}
 

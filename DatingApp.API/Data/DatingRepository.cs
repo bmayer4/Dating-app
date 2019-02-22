@@ -36,7 +36,7 @@ namespace DatingApp.API.Data
             //var users = await _context.Users.Include(u => u.Photos).ToListAsync();  //toList executes statement, goes to database and gets users
             var users = _context.Users.Include(u => u.Photos).OrderByDescending(u => u.LastActive).AsQueryable();  //AsQueryable lets you use where clause on it (woould have been IIncludableQuery)
             users = users.Where(u => u.Id != userParams.UserId);
-            users = users.Where(u => u.Gender == userParams.Gender);
+            users = users.Where(u => u.Gender == userParams.Gender);  // could check if userParams.Gender is "all" and no use this
 
             if (userParams.Likers)
             {

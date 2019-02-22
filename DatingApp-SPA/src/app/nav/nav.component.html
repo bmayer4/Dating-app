@@ -1,11 +1,13 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
   <div class="container">
+
       <div class="navbar-header">
-          <button type="button" class="navbar-toggle navbar-toggler collapsed d-block d-sm-none" (click)="isCollapsed = !isCollapsed">
+          <button type="button" class="navbar-toggler collapsed" (click)="isCollapsed = !isCollapsed">
               <span class="navbar-toggler-icon"></span>
           </button>
           <a class="navbar-brand d-none d-sm-inline" [routerLink]="['/home']">Dating App</a>
-        </div>
+      </div>
+
     <div id="navbar" class="navbar-collapse" [collapse]="isCollapsed">
     <ul *ngIf="loggedIn()" class="nav navbar-nav mr-auto">
       <li>
@@ -32,6 +34,7 @@
 
 
     <div *ngIf="loggedIn()" class="dropdown d-none d-sm-block" dropdown>
+
       <span class="mr-2">
         <img src="{{photoUrl || '../../../../assets/user.png'}}" alt="{{username}}">
       </span>
@@ -52,6 +55,7 @@
       <button [disabled]="!loginForm.valid" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
     </form>
   </div>
+
 </div>
 </nav>
 
