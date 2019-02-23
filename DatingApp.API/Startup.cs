@@ -41,6 +41,7 @@ namespace DatingApp.API
              services.AddDbContext<DataContext>(o => o.UseSqlServer(cs)
              .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
 
+            services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();  // this applies pending migrations in the context to azure db
             //in the middle of singleton and transient
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();

@@ -16,21 +16,21 @@ namespace DatingApp.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            //CreateWebHostBuilder(args).Build().Run();
 
-            //used below for seeding
-            // var host = CreateWebHostBuilder(args).Build();
+            // used below for seeding
+            var host = CreateWebHostBuilder(args).Build();
 
-            // using (var scope = host.Services.CreateScope())
-            // {
-            //     var services = scope.ServiceProvider;
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
 
-            //      var seed = services.GetRequiredService<Seed>();
-            //      seed.SeedUsers();
+                 var seed = services.GetRequiredService<Seed>();
+                 seed.SeedUsers();
 
-            // }
+            }
 
-           // host.Run();
+           host.Run();
 
         }
 

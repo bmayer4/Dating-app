@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DatingApp.API.Models;
 using Newtonsoft.Json;
 
@@ -14,6 +15,8 @@ namespace DatingApp.API.Data
 
         public void SeedUsers() 
         {
+            if (!_context.Users.Any()) {
+
             var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
             var users = JsonConvert.DeserializeObject<List<User>>(userData);
             foreach (var user in users) 
@@ -29,6 +32,7 @@ namespace DatingApp.API.Data
             }
             
             _context.SaveChanges();
+            }
         }
 
             //took this from AuthRepository (only seeding in dev, didn't want to make method public static in AuthRepo)
