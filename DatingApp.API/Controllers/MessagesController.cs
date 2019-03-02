@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DatingApp.API.Controllers
 {
     [ServiceFilter(typeof(LogUserActivity))]
-    [Authorize]
     [Route("api/users/{userId}/[controller]")]
     [ApiController]
     public class MessagesController: ControllerBase 
@@ -97,11 +96,6 @@ namespace DatingApp.API.Controllers
 
             var userFromRepo = await _repo.GetUser(userId);  // automapper only works with in-memory data!
 
-             if (userFromRepo == null)
-            {
-                return NotFound();
-            }
-
             var recipientFromRepo = await _repo.GetUser(messageForCreationDto.RecipientId);
 
              if (recipientFromRepo == null)
@@ -111,7 +105,7 @@ namespace DatingApp.API.Controllers
 
             messageForCreationDto.SenderId = userId;
 
-            var messageEntity = _mapper.Map<Message>(messageForCreationDto);  //HERE
+            var messageEntity = _mapper.Map<Message>(messageForCreationDto);  
 
             _repo.Add<Message>(messageEntity);   //**TODO */this vs userFromRepo.MessagesSent.Add(messageEntity)??
 

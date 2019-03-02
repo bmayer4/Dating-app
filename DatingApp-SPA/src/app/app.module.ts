@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule, BsDatepickerModule, PaginationModule, ButtonsModule, CollapseModule } from 'ngx-bootstrap';
+import { BsDropdownModule, BsDatepickerModule, PaginationModule, ButtonsModule, CollapseModule, ModalModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
 import { TabsModule } from 'ngx-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -34,6 +34,12 @@ import {TimeAgoPipe} from 'time-ago-pipe';
 import { ListsResolver } from './_resolvers/lists.resolver';
 import { MessagesResolver } from './_resolvers/messages.resolver';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { HasRoleDirective } from './_directives/hasRole.directive';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
+import { AdminService } from './_services/admin.service';
+import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 
 
 export function tokenGetter() {
@@ -54,7 +60,12 @@ export function tokenGetter() {
       MemberEditComponent,
       PhotoEditorComponent,
       MemberMessagesComponent,
-      TimeAgoPipe
+      AdminPanelComponent,
+      UserManagementComponent,
+      PhotoManagementComponent,
+      RolesModalComponent,
+      TimeAgoPipe,
+      HasRoleDirective
    ],
    imports: [
       BrowserModule,
@@ -70,6 +81,7 @@ export function tokenGetter() {
       ButtonsModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       CollapseModule.forRoot(),
+      ModalModule.forRoot(),
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,
@@ -89,7 +101,11 @@ export function tokenGetter() {
       MemberEditResolver,
       MessagesResolver,
       PreventUnsavedChanges,
-      ListsResolver
+      ListsResolver,
+      AdminService
+   ],
+   entryComponents: [
+      RolesModalComponent
    ],
    bootstrap: [
       AppComponent

@@ -2,7 +2,7 @@ import { Photo } from './photo';
 
 export interface User {  // matches userforlistdto, and optional for userfordetaildto with more properties
     id: number;
-    username: string;
+    userName: string;
     age: number;
     gender: string;
     created: Date;
@@ -13,5 +13,6 @@ export interface User {  // matches userforlistdto, and optional for userfordeta
     interests?: string;
     introduction?: string;
     lookingFor?: string;
-    photos: Photo[];
+    photos?: Photo[];
+    roles?: string[];
 }

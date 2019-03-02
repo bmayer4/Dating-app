@@ -18,7 +18,7 @@ namespace DatingApp.API
         {
             //CreateWebHostBuilder(args).Build().Run();
 
-            // used below for seeding
+            //used below for seeding
             var host = CreateWebHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())

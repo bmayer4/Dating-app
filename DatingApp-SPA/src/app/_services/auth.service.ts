@@ -55,4 +55,14 @@ logout() {
   this.currentUser = null;
 }
 
+roleMatch(allowedRoles: string[]): boolean {
+  const userRoles = this.decodedToken.role as string[];
+  for (const role of allowedRoles) {
+    if (userRoles.includes(role)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 }

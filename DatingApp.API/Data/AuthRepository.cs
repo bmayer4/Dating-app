@@ -16,15 +16,15 @@ namespace DatingApp.API.Data
 
         public async Task<User> Login(string username, string password)
         {
-            var user = await _context.Users.Include(u => u.Photos).FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _context.Users.Include(u => u.Photos).FirstOrDefaultAsync(u => u.UserName == username);
 
             if (user == null) {
                 return null;
             }
 
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)) {
-                return null;
-            }
+            // if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)) {
+            //     return null;
+            // }
 
             return user;
         }
@@ -60,8 +60,8 @@ namespace DatingApp.API.Data
 
             CreatePasswordHash(password, out passwordHash, out passwordSalt); //out passes in reference (not value) - when updated in CreatePasswordHash, they will be updated as well in Register method 
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            // user.PasswordHash = passwordHash;
+            // user.PasswordSalt = passwordSalt;
 
             await _context.Users.AddAsync(user);  //does not need to be async, not accessing db so should really be Add 
             await _context.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace DatingApp.API.Data
 
         public async Task<bool> UserExists(string username)
         {
-            if (await _context.Users.AnyAsync(u => u.Username == username)) {
+            if (await _context.Users.AnyAsync(u => u.UserName == username)) {
                 return true;
             }
 

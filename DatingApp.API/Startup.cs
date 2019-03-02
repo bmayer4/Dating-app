@@ -21,17 +21,23 @@ using Microsoft.AspNetCore.Http;
 using DatingApp.API.Helpers;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using DatingApp.API.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace DatingApp.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Env = env;
         }
 
         public IConfiguration Configuration { get; }
+        private IHostingEnvironment Env { get; set; } 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,17 +47,18 @@ namespace DatingApp.API
              services.AddDbContext<DataContext>(o => o.UseSqlServer(cs)
              .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
 
-            services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();  // this applies pending migrations in the context to azure db
-            //in the middle of singleton and transient
-            services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IDatingRepository, DatingRepository>();
-            services.AddTransient<Seed>();   //now creatable through DI
-            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));  //Look what this does! :)
-            services.AddScoped<LogUserActivity>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(opt => {
-                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                });
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt => {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opts => {
@@ -62,8 +69,28 @@ namespace DatingApp.API
                          ValidateIssuer = false,
                          ValidateAudience = false
                      };
-                });
+            });
 
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                opts.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+            });
+
+            //services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();  // this applies pending migrations in the context to azure db, because we aren't using localdb we cant dotnet ef database update), (only works in prod, updated - getting errors in prod also when I push to git)
+            services.AddScoped<IDatingRepository, DatingRepository>();   //in the middle of singleton and transient
+            services.AddTransient<Seed>();   //now creatable through DI
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));  //Look what this does! :)
+            services.AddScoped<LogUserActivity>();
+            services.AddMvc(opt => {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(opt => {
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
+            if (Env.IsDevelopment()) {
+                Mapper.Reset();
+            }
             services.AddAutoMapper();
             services.AddCors();
         }
