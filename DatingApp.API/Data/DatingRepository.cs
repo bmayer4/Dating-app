@@ -26,9 +26,18 @@ namespace DatingApp.API.Data
             _context.Remove(entity);
         }
 
-        public async Task<User> GetUser(int id)
+        public async Task<User> GetUser(int id, bool includeUnapprovedPhotos)
         {
-           return await _context.Users.Include(u => u.Photos).FirstOrDefaultAsync(u => u.Id == id);
+        //    if (includeUnapprovedPhotos) {
+        //      return await _context.Users.Include(u => u.Photos).IgnoreQueryFilters().FirstOrDefaultAsync(u => u.Id == id);
+        //    }
+        //    return await _context.Users.Include(u => u.Photos).FirstOrDefaultAsync(u => u.Id == id);
+        
+        var query =  _context.Users.Include(u => u.Photos).AsQueryable();
+        if (includeUnapprovedPhotos) {
+             query = query.IgnoreQueryFilters();
+        }
+           return await query.FirstOrDefaultAsync(u => u.Id == id);
         }
 
          public async Task<PagedList<User>> GetUsers(UserParams userParams)
@@ -80,12 +89,23 @@ namespace DatingApp.API.Data
 
         public async Task<Photo> GetPhoto(int userId, int id)
         {
-            return await _context.Photos.FirstOrDefaultAsync(p => p.UserId == userId && p.Id == id);
+            //IgnoreQueryFilters so we can delete photo still under approval, photos controller delete method needs this
+            return await _context.Photos.IgnoreQueryFilters().FirstOrDefaultAsync(p => p.UserId == userId && p.Id == id);
         }
+
+        public async Task<Photo> GetPhotoForAdmin(int id)
+        {
+            return await _context.Photos.IgnoreQueryFilters().FirstOrDefaultAsync(p => p.Id == id);
+        } 
 
         public async Task<Photo> GetMainPhotoForUser(int userId)
         {
             return await _context.Photos.Where(p => p.UserId == userId && p.IsMain == true).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Photo>> GetPhotosForApproval()
+        {
+            return await _context.Photos.Where(p => !p.IsApproved).IgnoreQueryFilters().ToListAsync();
         }
 
         public async Task<Like> GetLike(int userId, int recipientId)  //query same as above using Where

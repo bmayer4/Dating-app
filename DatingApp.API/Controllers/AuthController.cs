@@ -46,6 +46,9 @@ namespace DatingApp.API.Controllers
 
             var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
 
+            await _userManager.AddToRoleAsync(userToCreate, "Member");
+
+
             var userToReturn = _mapper.Map<UserForDetailDto>(userToCreate);
 
             if (result.Succeeded)
@@ -88,8 +91,8 @@ namespace DatingApp.API.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),  //in token as nameid
+                new Claim(ClaimTypes.Name, user.UserName)  //in token as unique_name
             };
 
             var roles = await _userManager.GetRolesAsync(user);

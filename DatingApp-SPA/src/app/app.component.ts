@@ -15,10 +15,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
       const token = localStorage.getItem('token');
-      // needed this because for nav pic, we only had user data through members components
-      // had to send user up from server on login
       const user: User = JSON.parse(localStorage.getItem('user'));
-      if (token && user) {
+      if (user && token && !this.jwtHelper.isTokenExpired(token)) {
         this.authService.decodedToken = this.jwtHelper.decodeToken(token);
         this.authService.currentUser = user;
         this.authService.changeMemberPhoto(user.photoUrl);

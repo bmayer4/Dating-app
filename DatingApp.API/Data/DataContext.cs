@@ -19,6 +19,9 @@ namespace DatingApp.API.Data
         {
             base.OnModelCreating(builder);
 
+            // globaal query filter
+            builder.Entity<Photo>().HasQueryFilter(p => p.IsApproved);
+
             builder.Entity<UserRole>(userRole => {
                 userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
                 userRole.HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.RoleId).IsRequired();

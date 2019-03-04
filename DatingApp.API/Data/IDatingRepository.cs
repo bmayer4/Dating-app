@@ -11,9 +11,11 @@ namespace DatingApp.API.Data
         void Delete<T>(T entity) where T: class;
         Task<bool> SaveAll();
         Task<PagedList<User>> GetUsers(UserParams userParams);
-        Task<User> GetUser(int id);
+        Task<User> GetUser(int id, bool includeUnapprovedPhotos);
         Task<Photo> GetPhoto(int userId, int id);
+        Task<Photo> GetPhotoForAdmin(int id);
         Task<Photo> GetMainPhotoForUser(int userId);
+        Task<IEnumerable<Photo>> GetPhotosForApproval();
         Task<Like> GetLike(int userId, int recipientId);
         Task<Message> GetMessage(int id);  // only for using in createdatroute after creating message
         Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);

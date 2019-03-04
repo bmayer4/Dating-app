@@ -44,6 +44,7 @@ getUsers(page?, itemsPerPage?, userParams?, likesParams?): Observable<PaginatedR
   return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params: params }).pipe(
     map(response => {
       paginatedResult.result = response.body;
+      console.log(response.body);
       if (response.headers.get('Pagination') != null) {
         paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
       }

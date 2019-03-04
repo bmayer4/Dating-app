@@ -2,6 +2,19 @@
     margin-bottom: 2px;
 } 
 
+.editThumbnail {
+    width: 100%;
+    position: relative;
+    opacity: .2;
+}
+
+.undapp {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 /* @media (max-width: 575.98px) {
     div.text-center {
         text-align: left !important;

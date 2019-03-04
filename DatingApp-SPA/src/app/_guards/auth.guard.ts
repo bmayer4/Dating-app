@@ -25,7 +25,6 @@ export class AuthGuard implements CanActivate {
     }
 
     if (this.authService.loggedIn()) {
-      console.log('still called!');
       return true;
     }
 

@@ -52,7 +52,7 @@ namespace DatingApp.API.Controllers
 
             return Ok(photoToReturn);
         }
-
+        
         [HttpPost]  //FromForm to recognize file
         public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm] PhotoForCreationDto photoForCreationDto)
         {
@@ -61,7 +61,7 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
             }
 
-            var userFromRepo = await _repo.GetUser(userId);
+            var userFromRepo = await _repo.GetUser(userId, false);
 
             var file = photoForCreationDto.File;
             var uploadResult = new ImageUploadResult();  //store result from cloudinary

@@ -51,7 +51,8 @@ export class PhotoEditorComponent implements OnInit {
           url: res.url,
           dateAdded: res.dateAdded,
           description: res.description,
-          isMain: res.isMain  // api sets it to main if first photo
+          isMain: res.isMain,  // api sets it to main if first photo
+          isApproved: res.isApproved
         };
         this.photos.push(photo);
         if (photo.isMain) {   // important for first photo uploaded to show instantly througout app (lec 130)

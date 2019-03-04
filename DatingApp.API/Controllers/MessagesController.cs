@@ -71,7 +71,7 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
             }
 
-             var recipientFromRepo = await _repo.GetUser(recipientId);
+             var recipientFromRepo = await _repo.GetUser(recipientId, false);
 
              if (recipientFromRepo == null)
             {
@@ -94,9 +94,9 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
             }
 
-            var userFromRepo = await _repo.GetUser(userId);  // automapper only works with in-memory data!
+            var userFromRepo = await _repo.GetUser(userId, false);  // automapper only works with in-memory data!
 
-            var recipientFromRepo = await _repo.GetUser(messageForCreationDto.RecipientId);
+            var recipientFromRepo = await _repo.GetUser(messageForCreationDto.RecipientId, false);
 
              if (recipientFromRepo == null)
             {

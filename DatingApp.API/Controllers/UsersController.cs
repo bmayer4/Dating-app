@@ -31,7 +31,7 @@ namespace DatingApp.API.Controllers
         {
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var userFromRepo = await _repo.GetUser(currentUserId);  //  not necessary to null check since userId was found
+            var userFromRepo = await _repo.GetUser(currentUserId, false);  //  not necessary to null check since userId was found
 
             userParams.UserId = currentUserId;
 
@@ -52,7 +52,10 @@ namespace DatingApp.API.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _repo.GetUser(id);
+            //for photo appoval
+            var isCurrentUser = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) == id;
+           
+            var user = await _repo.GetUser(id, isCurrentUser);
 
             if (user == null) {
                 return BadRequest();
@@ -71,7 +74,7 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
             }
 
-            var userFromRepo = await _repo.GetUser(id);
+            var userFromRepo = await _repo.GetUser(id, true);
 
             _mapper.Map(userforUpdateDto, userFromRepo);
 
@@ -97,7 +100,7 @@ namespace DatingApp.API.Controllers
                 return BadRequest("You've already liked this user");
             }
 
-            var recipientFromRepo = await _repo.GetUser(recipientId);
+            var recipientFromRepo = await _repo.GetUser(recipientId, false);
 
             if (recipientFromRepo == null) {
                 return NotFound();
