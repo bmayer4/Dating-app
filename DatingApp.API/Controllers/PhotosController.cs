@@ -69,7 +69,7 @@ namespace DatingApp.API.Controllers
             if (file == null) {   //maybe validation would be better..
                 return BadRequest();   //don't want to call length on null file
             }
-
+                
             if (file.Length > 0) 
             {
                 //OpenReadStream reads files into memory, using so we can dispose of it
@@ -95,7 +95,7 @@ namespace DatingApp.API.Controllers
                 photoEntity.IsMain = true;
             }
 
-            userFromRepo.Photos.Add(photoEntity);  //add as child so userId gets set in photoEntity
+            userFromRepo.Photos.Add(photoEntity);  //add as child so userId gets set in photoEntity (userId FK was not on dto, connected it here)
 
             if (!await _repo.SaveAll())
             {

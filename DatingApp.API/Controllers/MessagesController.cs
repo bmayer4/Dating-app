@@ -107,7 +107,7 @@ namespace DatingApp.API.Controllers
 
             var messageEntity = _mapper.Map<Message>(messageForCreationDto);  
 
-            _repo.Add<Message>(messageEntity);   //**TODO */this vs userFromRepo.MessagesSent.Add(messageEntity)??
+            _repo.Add<Message>(messageEntity);   //**TODO */this vs userFromRepo.MessagesSent.Add(messageEntity)?? (update - I think because foreign keys were defined, if not Users.Messages.Add would fill in FK..)
 
             if (!await _repo.SaveAll())
             {

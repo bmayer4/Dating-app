@@ -44,7 +44,7 @@ export class PhotoEditorComponent implements OnInit {
 
     this.uploader.onSuccessItem = (item, response, status, header) => {
       if (response) {  // response is string, JSON.Parse converts it into object (because photo is an object)
-        console.log('res', response); // is from api
+        console.log('res', response); // is from api, gets called one time for each file if multiple files
         const res: Photo = JSON.parse(response);
         const photo = {
           id: res.id,
